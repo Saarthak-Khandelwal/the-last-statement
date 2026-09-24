@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>THE LAST STATEMENT</title>
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
+</head>
+
+<body>
+
+    <!-- =====================================================
+         START SCREEN
+         ===================================================== -->
+
+    <div id="start">
+
+        <div class="start-inner">
+
+            <div class="start-case">
+                CASE 017 / BELLWEATHER
+            </div>
+
+            <h1 class="start-title">
+                THE LAST STATEMENT
+            </h1>
+
+            <p class="start-description">
+                Everyone has something to hide.<br>
+                The truth depends on what you notice.
+            </p>
+
+            <button
+                id="startBtn"
+                class="start-button"
+                type="button"
+            >
+                BEGIN INVESTIGATION
+            </button>
+
+            <p class="start-controls">
+                ↑ ↓ CHOOSE &nbsp;·&nbsp;
+                ENTER SELECT &nbsp;·&nbsp;
+                E EVIDENCE &nbsp;·&nbsp;
+                D DIALOGUE &nbsp;·&nbsp;
+                ESC CLOSE
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         GAME
+         ===================================================== -->
+
+    <div
+        id="game"
+        class="game"
+    >
+
+        <!-- =================================================
+             TOP BAR
+             ================================================= -->
+
+        <header
+            id="topbar"
+            class="topbar"
+        >
+
+            <div
+                id="caseTitle"
+                class="case-title"
+            >
+                CASE 017 — MARA VENN
+            </div>
+
+            <div
+                id="chapter"
+                class="chapter"
+            >
+                01 / THE APARTMENT
+            </div>
+
+            <button
+                id="evidenceBtn"
+                type="button"
+            >
+                EVIDENCE [E]
+            </button>
+
+            <button
+                id="dialogueBtn"
+                type="button"
+            >
+                DIALOGUE [D]
+            </button>
+
+            <button
+                id="resetBtn"
+                type="button"
+            >
+                RESTART INVESTIGATION
+            </button>
+
+        </header>
+
+
+        <!-- =================================================
+             MAIN
+             ================================================= -->
+
+        <main
+            id="main"
+            class="main"
+        >
+
+            <!-- =============================================
+                 LEFT — STATEMENT
+                 ============================================= -->
+
+            <aside
+                id="dialogue"
+                class="statement-panel"
+            >
+
+                <div class="panel-kicker">
+                    STATEMENT
+                </div>
+
+                <div
+                    id="speaker"
+                    class="speaker"
+                >
+
+                    DISPATCH
+
+                    <small
+                        id="sub"
+                        class="sub"
+                    >
+                        POLICE RADIO
+                    </small>
+
+                </div>
+
+                <div
+                    id="text"
+                    class="text"
+                ></div>
+
+            </aside>
+
+
+            <!-- =============================================
+                 CENTER — SCENE
+                 ============================================= -->
+
+            <section
+                id="stage"
+                class="stage"
+            >
+
+                <img
+                    id="sceneImg"
+                    class="scene-image"
+                    src="scenes/01_maras_apartment.jpg"
+                    alt="Current investigation scene"
+                >
+
+                <div
+                    id="location"
+                    class="location"
+                >
+                    17 BELLWEATHER STREET
+                </div>
+
+                <div
+                    id="time"
+                    class="time"
+                >
+                    23:47
+                </div>
+
+            </section>
+
+
+            <!-- =============================================
+                 RIGHT — DECISION
+                 ============================================= -->
+
+            <aside
+                id="choicesPanel"
+                class="choice-panel"
+            >
+
+                <div class="panel-kicker">
+                    DECISION
+                </div>
+
+                <div class="decision-label">
+                    WHAT DO YOU DO?
+                </div>
+
+                <div
+                    id="choices"
+                    class="choices-list"
+                ></div>
+
+                <div
+                    id="controls"
+                    class="controls"
+                >
+
+                    <button
+                        id="backBtn"
+                        type="button"
+                    >
+                        BACK
+                    </button>
+
+                    <button
+                        id="notesBtn"
+                        type="button"
+                    >
+                        NOTES
+                    </button>
+
+                </div>
+
+            </aside>
+
+        </main>
+
+    </div>
+
+
+    <!-- =====================================================
+         EVIDENCE BOARD
+         ===================================================== -->
+
+    <div
+        id="evidenceOverlay"
+        class="overlay hidden"
+    >
+
+        <div class="modal evidence-window">
+
+            <div class="modal-header">
+
+                <div class="modal-title">
+                    EVIDENCE BOARD
+                </div>
+
+                <button
+                    id="closeEvidence"
+                    class="modal-close"
+                    type="button"
+                >
+                    CLOSE
+                </button>
+
+            </div>
+
+            <div
+                id="evidenceList"
+                class="evidence-list"
+            ></div>
+
+            <div class="connection-section">
+
+                <div class="connection-heading">
+                    CONNECTIONS
+                </div>
+
+                <div
+                    id="evidenceConnections"
+                    class="evidence-connections"
+                ></div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         DIALOGUE LOG
+         ===================================================== -->
+
+    <div
+        id="dialogueOverlay"
+        class="overlay hidden"
+    >
+
+        <div class="dialogue-window">
+
+            <div class="modal-header">
+
+                <div class="modal-title">
+                    DIALOGUE LOG
+                </div>
+
+                <button
+                    id="closeDialogue"
+                    class="modal-close"
+                    type="button"
+                >
+                    CLOSE [D]
+                </button>
+
+            </div>
+
+            <div class="dialogue-body">
+
+                <aside
+                    id="dialoguePeople"
+                    class="dialogue-people"
+                ></aside>
+
+                <section
+                    id="dialogueEntries"
+                    class="dialogue-entries"
+                ></section>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- =====================================================
+     NOTES OVERLAY
+     ===================================================== -->
+
+    <div id="notesOverlay" class="notes-overlay hidden">
+
+        <div class="notes-window">
+
+            <div class="notes-header">
+
+                <div>
+                    <div class="notes-kicker">CASE NOTES</div>
+                    <h2>NOTEPAD</h2>
+                </div>
+
+                <button id="closeNotes" type="button">
+                    CLOSE
+                </button>
+
+            </div>
+
+            <textarea
+                id="notesText"
+                placeholder="Write your notes here..."
+                spellcheck="false"
+            ></textarea>
+
+            <div class="notes-footer">
+                <span>NOTES ARE SAVED AUTOMATICALLY</span>
+
+                <button id="clearNotes" type="button">
+                    CLEAR NOTES
+                </button>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- =====================================================
+         FINAL ACCUSATION
+         ===================================================== -->
+
+    <div
+        id="accusationOverlay"
+        class="overlay hidden"
+    >
+
+        <div class="accusation-window">
+
+            <div class="accusation-kicker">
+                FINAL RECONSTRUCTION
+            </div>
+
+            <h2 class="accusation-title">
+                WHO DO YOU BELIEVE KILLED MARA?
+            </h2>
+
+            <p class="accusation-description">
+                The evidence is on the table.
+                The statements are in your notebook.
+                Now decide what you believe happened.
+            </p>
+
+            <div
+                id="accusationChoices"
+                class="accusation-choices"
+            ></div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         ENDING
+         ===================================================== -->
+
+    <div
+        id="endOverlay"
+        class="ending-overlay hidden"
+    >
+
+        <div class="ending-window">
+
+            <div
+                id="endKicker"
+                class="ending-kicker"
+            >
+                CASE DISPOSITION
+            </div>
+
+            <div
+                id="endTitle"
+                class="ending-title"
+            ></div>
+
+            <div
+                id="endText"
+                class="ending-text"
+            ></div>
+
+            <div
+                id="endingScore"
+                class="ending-score"
+            ></div>
+
+            <button
+                id="endRestart"
+                class="ending-button"
+                type="button"
+            >
+                PLAY AGAIN
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <script
+        src="game.js"
+        defer
+    ></script>
+
+</body>
+
+</html>
