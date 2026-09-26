@@ -16,6 +16,24 @@ function startMusic() {
     });
 }
 
+document.addEventListener(
+    "click",
+    () => {
+
+        if (
+            state.started &&
+            bgMusic &&
+            bgMusic.paused
+        ) {
+
+            bgMusic.play().catch(() => {});
+
+        }
+
+    },
+    { once: true }
+);
+
 function fadeMusic(targetVolume = 0.03, duration = 1200) {
     if (!bgMusic) return;
 
@@ -5590,5 +5608,7 @@ if (
         );
 
     render();
+
+    startMusic();
 
 }
