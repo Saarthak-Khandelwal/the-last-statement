@@ -1,20 +1,93 @@
 const $ = (selector) =>
     document.querySelector(selector);
 
-const bgMusic = document.getElementById("bgMusic");
+let bgMusic = null;
 
-if (bgMusic) {
-    bgMusic.volume = 0.12;
+function getBgMusic() {
+    if (!bgMusic) {
+        bgMusic = document.getElementById("bgMusic");
+    }
+
+    return bgMusic;
 }
 
-function startMusic() {
-    if (!bgMusic) return;
 
-    bgMusic.currentTime = 0;
-    bgMusic.play().catch(() => {
-        // Browser blocked autoplay; another user interaction can start it.
+function startMusic(resetPosition = true) {
+    const music = getBgMusic();
+
+    if (!music) return;
+
+    music.volume = 0.12;
+
+    if (resetPosition) {
+        music.currentTime = 0;
+    }
+
+    music.play().catch(() => {
+        // Browser blocked autoplay.
     });
 }
+
+
+function resumeMusic() {
+    const music = getBgMusic();
+
+    if (!music) return;
+
+    if (!state.started) return;
+
+    music.volume = 0.12;
+
+    music.play().catch(() => {
+        // Browser requires a user interaction.
+    });
+}
+
+
+/*
+ * Save the current music position.
+ */
+document.addEventListener(
+    "timeupdate",
+    () => {
+
+        const music = getBgMusic();
+
+        if (!music) return;
+
+        localStorage.setItem(
+            "tls-music-time",
+            music.currentTime
+        );
+
+    }
+);
+
+
+/*
+ * Resume music after a user interaction.
+ * Capture mode makes this work even when
+ * the click is on a game button.
+ */
+document.addEventListener(
+    "pointerdown",
+    () => {
+
+        resumeMusic();
+
+    },
+    true
+);
+
+document.addEventListener(
+    "keydown",
+    () => {
+
+        resumeMusic();
+
+    },
+    true
+);
 
 document.addEventListener(
     "click",
@@ -5150,7 +5223,7 @@ $("#startBtn")
             state.started =
                 true;
             
-            startMusic();
+            startMusic(true);
 
             render();
 
@@ -5606,9 +5679,29 @@ if (
         ?.classList.add(
             "hidden"
         );
+    
+    const savedMusicTime =
+        parseFloat(
+            localStorage.getItem(
+                "tls-music-time"
+            )
+        );
+
+    const music =
+        getBgMusic();
+
+    if (
+        music &&
+        Number.isFinite(savedMusicTime)
+    ) {
+
+        music.currentTime =
+            savedMusicTime;
+
+    }
 
     render();
 
-    startMusic();
+    resumeMusic();
 
 }
