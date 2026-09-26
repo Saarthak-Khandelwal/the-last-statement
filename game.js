@@ -1,7 +1,40 @@
 const $ = (selector) =>
     document.querySelector(selector);
 
+const bgMusic = document.getElementById("bgMusic");
 
+if (bgMusic) {
+    bgMusic.volume = 0.12;
+}
+
+function startMusic() {
+    if (!bgMusic) return;
+
+    bgMusic.currentTime = 0;
+    bgMusic.play().catch(() => {
+        // Browser blocked autoplay; another user interaction can start it.
+    });
+}
+
+function fadeMusic(targetVolume = 0.03, duration = 1200) {
+    if (!bgMusic) return;
+
+    const startVolume = bgMusic.volume;
+    const startTime = performance.now();
+
+    function step(now) {
+        const progress = Math.min((now - startTime) / duration, 1);
+
+        bgMusic.volume =
+            startVolume + (targetVolume - startVolume) * progress;
+
+        if (progress < 1) {
+            requestAnimationFrame(step);
+        }
+    }
+
+    requestAnimationFrame(step);
+}
 /* =========================================================
    SCENES
    ========================================================= */
@@ -1107,6 +1140,7 @@ function render() {
             () => {
 
                 showEnding(
+                    
                     determineEnding()
                 );
 
@@ -2711,6 +2745,7 @@ function showEnding(
 
         text.textContent =
             getLastStatementText();
+        fadeMusic(0.03, 1500);
 
 
     } else {
@@ -5096,7 +5131,8 @@ $("#startBtn")
 
             state.started =
                 true;
-
+            
+            startMusic();
 
             render();
 
