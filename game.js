@@ -1,59 +1,101 @@
 const $ = (selector) =>
     document.querySelector(selector);
 
+
+/* =========================================================
+   BACKGROUND MUSIC
+   ========================================================= */
+
 let bgMusic = null;
 
+
 function getBgMusic() {
+
     if (!bgMusic) {
-        bgMusic = document.getElementById("bgMusic");
+        bgMusic =
+            document.getElementById("bgMusic");
     }
 
     return bgMusic;
 }
 
 
-function startMusic(resetPosition = true) {
-    const music = getBgMusic();
+function startMusic() {
 
-    if (!music) return;
+    const music =
+        getBgMusic();
+
+    if (!music) {
+        return;
+    }
 
     music.volume = 0.12;
 
-    if (resetPosition) {
-        music.currentTime = 0;
-    }
+    music.currentTime = 0;
 
     music.play().catch(() => {
-        // Browser blocked autoplay.
+        /*
+         * Browser may block autoplay.
+         * The first click after reload will
+         * try again.
+         */
     });
 }
 
 
 function resumeMusic() {
-    const music = getBgMusic();
 
-    if (!music) return;
+    const music =
+        getBgMusic();
 
-    if (!state.started) return;
+    if (!music) {
+        return;
+    }
+
+    if (!state.started) {
+        return;
+    }
 
     music.volume = 0.12;
 
-    music.play().catch(() => {
-        // Browser requires a user interaction.
-    });
+    const savedTime =
+        parseFloat(
+            localStorage.getItem(
+                "tls-music-time"
+            )
+        );
+
+    if (
+        Number.isFinite(savedTime) &&
+        music.readyState >= 1 &&
+        Math.abs(
+            music.currentTime -
+            savedTime
+        ) > 1
+    ) {
+
+        music.currentTime =
+            savedTime;
+    }
+
+    music.play().catch(() => {});
 }
 
 
 /*
- * Save the current music position.
+ * Save music position.
  */
+
 document.addEventListener(
     "timeupdate",
     () => {
 
-        const music = getBgMusic();
+        const music =
+            getBgMusic();
 
-        if (!music) return;
+        if (!music) {
+            return;
+        }
 
         localStorage.setItem(
             "tls-music-time",
@@ -65,10 +107,10 @@ document.addEventListener(
 
 
 /*
- * Resume music after a user interaction.
- * Capture mode makes this work even when
- * the click is on a game button.
+ * Browser requires a user gesture
+ * after a full page reload.
  */
+
 document.addEventListener(
     "pointerdown",
     () => {
@@ -78,6 +120,12 @@ document.addEventListener(
     },
     true
 );
+
+
+/*
+ * Also allow keyboard interaction
+ * to resume the music.
+ */
 
 document.addEventListener(
     "keydown",
@@ -89,42 +137,59 @@ document.addEventListener(
     true
 );
 
-document.addEventListener(
-    "click",
-    () => {
 
-        if (
-            state.started &&
-            bgMusic &&
-            bgMusic.paused
-        ) {
+function fadeMusic(
+    targetVolume = 0.03,
+    duration = 1200
+) {
 
-            bgMusic.play().catch(() => {});
+    const music =
+        getBgMusic();
 
-        }
-
-    },
-    { once: true }
-);
-
-function fadeMusic(targetVolume = 0.03, duration = 1200) {
-    if (!bgMusic) return;
-
-    const startVolume = bgMusic.volume;
-    const startTime = performance.now();
-
-    function step(now) {
-        const progress = Math.min((now - startTime) / duration, 1);
-
-        bgMusic.volume =
-            startVolume + (targetVolume - startVolume) * progress;
-
-        if (progress < 1) {
-            requestAnimationFrame(step);
-        }
+    if (!music) {
+        return;
     }
 
-    requestAnimationFrame(step);
+    const startVolume =
+        music.volume;
+
+    const startTime =
+        performance.now();
+
+
+    function step(now) {
+
+        const progress =
+            Math.min(
+                (now - startTime) /
+                    duration,
+                1
+            );
+
+
+        music.volume =
+            startVolume +
+            (
+                targetVolume -
+                startVolume
+            ) *
+            progress;
+
+
+        if (progress < 1) {
+
+            requestAnimationFrame(
+                step
+            );
+
+        }
+
+    }
+
+
+    requestAnimationFrame(
+        step
+    );
 }
 /* =========================================================
    SCENES
@@ -5223,7 +5288,7 @@ $("#startBtn")
             state.started =
                 true;
             
-            startMusic(true);
+            startMusic();
 
             render();
 
@@ -5680,28 +5745,6 @@ if (
             "hidden"
         );
     
-    const savedMusicTime =
-        parseFloat(
-            localStorage.getItem(
-                "tls-music-time"
-            )
-        );
-
-    const music =
-        getBgMusic();
-
-    if (
-        music &&
-        Number.isFinite(savedMusicTime)
-    ) {
-
-        music.currentTime =
-            savedMusicTime;
-
-    }
-
     render();
-
-    resumeMusic();
 
 }
