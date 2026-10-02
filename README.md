@@ -66,6 +66,6 @@ Vanilla JavaScript, HTML and CSS. Scene photos are turned into the game's monoch
 
 ## Credits
 
-Music: Dark Suspense Thriller by alex-morgan (Pixabay)
+Music: [Dark Suspense Thriller by alex-morgan (Pixabay)](https://pixabay.com/music/ambient-dark-suspense-thriller-528314/)
 
 Made by [Saarthak Khandelwal](https://github.com/Saarthak-Khandelwal).
