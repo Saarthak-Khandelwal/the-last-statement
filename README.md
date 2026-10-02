@@ -4,7 +4,7 @@ A short, choice-based detective game that runs in your browser. No installs, no 
 
 ![Mara's apartment](scenes/01_maras_apartment.jpg)
 
-**Play it:** [add your GitHub Pages link here]
+**Play it:** (https://saarthak-khandelwal.github.io/the-last-statement/)
 
 ## The case
 
